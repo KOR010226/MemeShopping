@@ -1,441 +1,105 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meme Mart | 你的智商儲值中心</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* 1. 核心迷因字體 */
-        body {
-            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewport="0 0 24 24" style="fill:black;font-size:24px"><text y="50%">👆</text></svg>') 16 0, auto;
-        }
-
-        /* 2. 背景動畫 */
-        @keyframes rainbow-bg {
-            0% { background-color: #ffadad; }
-            20% { background-color: #ffd6a5; }
-            40% { background-color: #fdffb6; }
-            60% { background-color: #caffbf; }
-            80% { background-color: #9bf6ff; }
-            100% { background-color: #a0c4ff; }
-        }
-        .meme-bg { animation: rainbow-bg 5s infinite alternate; }
-
-        /* 3. 震動特效 */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
-        .shake-on-hover:hover { animation: shake 0.5s infinite; }
-
-        /* Marquee */
-        .marquee-container { overflow: hidden; white-space: nowrap; }
-        .marquee-text { display: inline-block; animation: marquee 10s linear infinite; }
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
-        /* Win95 Style */
-        .win95-box {
-            background: #c0c0c0;
-            border-top: 2px solid #dfdfdf;
-            border-left: 2px solid #dfdfdf;
-            border-right: 2px solid #000000;
-            border-bottom: 2px solid #000000;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
-        }
-        .win95-header {
-            background: linear-gradient(90deg, navy, #1084d0);
-            color: white;
-            padding: 2px 4px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* 價格波動顏色 */
-        .price-up { color: #22c55e; animation: pulse-green 0.5s; }
-        .price-down { color: #ef4444; animation: pulse-red 0.5s; }
-        @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.2); color: lime; } 100% { transform: scale(1); } }
-        @keyframes pulse-red { 0% { transform: scale(1); } 50% { transform: scale(1.2); color: red; } 100% { transform: scale(1); } }
-    </style>
+    <meta charset="utf-8">
+    <title>Meme Mart | 迷因超市</title>
+    <link rel=stylesheet type="text/css" href="style.css">
+    <script src="script.js"></script>
 </head>
-<body class="meme-bg min-h-screen flex flex-col">
 
-    <!-- 頂部跑馬燈：加密貨幣風格 -->
-    <div class="bg-black text-lime-400 p-2 font-mono font-bold marquee-container border-b-4 border-red-500">
-        <div class="marquee-text" id="crypto-ticker">
-            🚀 DOGE: Loading... | 💎 BTC: $1,000,000 (Soon) | 📉 你的 GPA: -50% | 🐒 NFT 泡沫破裂中 | ⚠️ 本站匯率極不穩定，請謹慎投資智商
+<body class="rainbow-bg">
+    <div class="marquee-container">
+        <div class="marquee-content">
+            📢 公告：本網站只有迷因是真的，其他都是假的！ | ⚠️ 警告：瀏覽本網站可能導致智商暫時性下降 | 📉 你的期末成績: 404 Not Found | 🥺 老師請給我 100 分拜託拜託
         </div>
     </div>
-
-    <!-- 導航列 -->
-    <nav class="p-4 flex flex-col md:flex-row gap-4 justify-between items-center bg-blue-700 text-white border-b-8 border-yellow-400 sticky top-0 z-40 shadow-xl">
-        <div class="flex items-center gap-2">
-            <h1 class="text-4xl font-black italic tracking-tighter transform -rotate-2 hover:rotate-2 transition" style="text-shadow: 3px 3px 0px #000;">
-                🐸 Meme Mart
-            </h1>
-            <span class="text-xs bg-red-500 px-2 py-1 transform rotate-12 border border-white font-bold">BETA</span>
-        </div>
-
-        <!-- 匯率看板 -->
-        <div class="win95-box px-4 py-1 flex items-center gap-2 bg-black text-green-400 font-mono text-sm md:text-base">
-            <span>1 MEME = </span>
-            <span id="exchange-rate" class="font-bold text-xl">$0.00</span>
-            <span id="rate-change">(--%)</span>
-        </div>
-
-        <button onclick="toggleCart()" class="win95-box px-4 py-2 text-black font-bold active:translate-y-1 transition hover:bg-gray-200 flex gap-2 items-center">
-            <span>🛒 垃圾車</span>
-            <span id="cart-count" class="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">0</span>
-        </button>
-    </nav>
-
-    <div class="flex flex-1 flex-col md:flex-row">
-
-        <!-- 側邊欄：控制台 -->
-        <aside class="w-full md:w-64 bg-gray-200 p-4 border-r-4 border-black flex flex-col gap-6 z-30">
-
-            <div class="win95-box p-1">
-                <div class="win95-header">
-                    <span>📂 分類 (Categories)</span>
-                </div>
-                <div class="p-4 bg-white flex flex-col gap-2 text-center">
-                    <p class="text-xs text-gray-500 mb-2">請選擇你的毒藥</p>
-                    <button onclick="filterProducts('all')" class="bg-blue-200 hover:bg-blue-300 border-2 border-blue-500 p-1 font-bold">📚 全部迷因</button>
-                    <button onclick="filterProducts('2025')" class="bg-red-200 hover:bg-red-300 border-2 border-red-500 p-1 font-bold">🔥 2025 熱門 (Recent)</button>
-                    <button onclick="filterProducts('classic')" class="bg-yellow-200 hover:bg-yellow-300 border-2 border-yellow-500 p-1 font-bold">🏆 上古神獸 (Classic)</button>
-                    <hr class="border-black my-2">
-                    <button onclick="filterProducts('emotional')" class="bg-purple-200 hover:bg-purple-300 border-2 border-purple-500 p-1 text-sm">💔 精神傷害</button>
-                    <button onclick="filterProducts('useless')" class="bg-green-200 hover:bg-green-300 border-2 border-green-500 p-1 text-sm">🗑️ 物理廢物</button>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div class="site-title">
+                <span class="site-emoji">🗿</span>
+                <h1>Meme Mart</h1>
+            </div>
+            <div class="led-display">
+                <span class="led-label">Live Rate</span>
+                <div class="flex items-center gap-2">
+                    <span class="led-value" id="rate-display">LOADING...</span>
+                    <span class="animate-pulse">●</span>
                 </div>
             </div>
-
-            <!-- 市場情緒指標 -->
-            <div class="win95-box p-1">
-                <div class="win95-header bg-gray-700">
-                    <span>📊 市場情緒</span>
-                </div>
-                <div class="p-4 bg-white text-center">
-                    <div class="text-4xl mb-2" id="market-mood">😱</div>
-                    <p class="font-bold text-red-600">極度恐慌</p>
-                    <div class="w-full bg-gray-300 h-4 mt-2 border border-black rounded-full overflow-hidden">
-                        <div class="bg-red-500 h-full w-[20%] animate-pulse"></div>
+            <button onclick="toggleCart()" class="box cart-btn">
+                🛒 購物車
+                <span id="cart-count" class="cart-badge">0</span>
+            </button>
+        </div>
+    </nav>
+    <div class="container main-layout">
+        <aside class="sidebar sidebar-section">
+            <div class="box">
+                <div class="title-bar">
+                    <span>📁 迷因分類</span>
+                    <div class="window-controls">
+                        <button class="win-btn">-</button>
+                        <button class="win-btn close">x</button>
                     </div>
                 </div>
+                <div style="padding: 1rem; background-color: #f3f4f6;">
+                    <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.75rem; font-weight: bold; text-align: center;">👇 請選擇你的毒藥 👇</p>
+                    <button onclick="filterProducts('all')" class="cat-btn bg-white">🌈 全部顯示 (All)</button>
+                    <button onclick="filterProducts('classic')" class="cat-btn bg-yellow">🏆 經典神獸 (Classic)</button>
+                    <button onclick="filterProducts('taiwan')" class="cat-btn bg-blue">🇹🇼 台灣迷因 (Local)</button>
+                </div>
             </div>
-
+             <div class="box" style="animation: bounce 1s infinite;">
+                <div class="title-bar" style="background-color: red;">
+                    <span>⚠️ 警告</span>
+                </div>
+                <div style="padding: 1rem; text-align: center;">
+                    <p style="font-weight: bold; color: #dc2626; margin-bottom: 0.5rem;">你的期末專案還沒做完！</p>
+                    <button onclick="alert('想得美！快點去寫專案！')" style="border: 2px solid black; padding: 0.5rem 1rem; background: white; font-weight: bold; cursor: pointer; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);">
+                        👉 點擊這裡解決 👈
+                    </button>
+                </div>
+            </div>
         </aside>
-
-        <!-- 商品展示區 -->
-        <main class="flex-1 p-6 relative">
-            <!-- 載入動畫 -->
-            <div id="loader" class="text-center py-20">
-                <div class="text-6xl animate-spin inline-block">🐕</div>
-                <p class="text-2xl mt-4 font-bold text-white drop-shadow-md">正在連線至區塊鏈...</p>
+        <main class="content-area">
+            <div id="loader">
+                <div class="loader-icon animate-spin">🌀</div>
+                <p class="loader-text">正在下載網際網路...</p>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-top: 0.5rem;">請勿關閉電源 (雖然這只是網頁)</p>
             </div>
-
-            <!-- 商品網格 -->
-            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 hidden">
-                <!-- 商品會插在這裡 -->
+            <div class="reviews-container" style="margin-top: 0; margin-bottom: 3rem; border-top: none; border-bottom: 4px dashed #9ca3af; padding-top: 0; padding-bottom: 2rem;">
+                <h3 class="text-center font-bold" style="font-size: 1.5rem; margin-bottom: 1.5rem; color: #1e3a8a;">
+                    📢 受害者心得
+                </h3>
+                <div id="reviews-list" class="reviews-grid">
+                    <p class="text-center" style="grid-column: span 3;">正在載入來自平行宇宙的評論...</p>
+                </div>
+            </div>
+            <div id="product-list" class="product-grid hidden">
             </div>
         </main>
     </div>
-
-    <!-- 購物車 Modal -->
-    <div id="cart-modal" class="fixed inset-0 bg-black/80 hidden z-50 flex justify-center items-center backdrop-blur-sm">
-        <div class="win95-box bg-white w-96 max-w-full m-4 shadow-2xl">
-            <div class="win95-header">
+    <div id="cart-modal" class="modal-overlay hidden">
+        <div class="box modal-content">
+            <div class="title-bar">
                 <span>🛒 結帳櫃檯</span>
-                <button onclick="toggleCart()" class="bg-red-600 text-white px-2 font-bold hover:bg-red-700">X</button>
+                <button onclick="toggleCart()" style="background-color: #dc2626; color: white; border: none; padding: 0 5px; cursor: pointer;">X</button>
             </div>
-            <div class="p-4 max-h-[60vh] overflow-y-auto">
-                <ul id="cart-items" class="space-y-2 text-sm">
-                    <!-- 購物車項目 -->
+            <div class="modal-body">
+                <ul id="cart-items" class="cart-list">
                 </ul>
-                <div class="mt-4 pt-4 border-t-2 border-black flex justify-between font-bold text-xl">
-                    <span>總計 (USD):</span>
-                    <span id="cart-total" class="font-mono text-green-600">$0.00</span>
+                <div style="border-top: 4px solid black; padding-top: 1rem;">
+                    <div class="flex justify-between items-center" style="margin-bottom: 1rem;">
+                        <span class="font-bold" style="font-size: 1.25rem;">總金額 (Total):</span>
+                        <span id="cart-total" style="font-family: monospace; font-size: 1.875rem; font-weight: 900; color: #16a34a;">$0.00</span>
+                    </div>
+                    <button onclick="checkout()" class="checkout-btn">
+                        💸 立即刷卡結束這一回合!
+                    </button>
                 </div>
-                <p class="text-xs text-gray-500 mt-1">* 價格已鎖定 5 秒 (大概吧)</p>
-                <button onclick="checkout()" class="w-full mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-3 border-4 border-green-800 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition">
-                    💸 SHUT UP AND TAKE MY MONEY
-                </button>
             </div>
         </div>
     </div>
-
-    <script>
-        // --- 1. 資料庫 (加入年份與基本 Meme 幣定價) ---
-        // basePrice: 基礎定價 (單位: Meme Coin)
-        // year: 用於分類
-        const MEME_PRODUCTS = [
-            { id: 1, name: "Chill Guy", basePrice: 50, year: 2025, category: "emotional", img: "https://placehold.co/400x300/8B4513/ffffff?text=Chill+Guy", desc: "他只是一個 Chill Guy，別管他。" },
-            { id: 2, name: "Pop Cat (聲控版)", basePrice: 120, year: 2020, category: "useless", img: "https://placehold.co/400x300/ffcc00/000000?text=POP+CAT", desc: "啵啵啵啵啵啵啵啵啵啵。" },
-            { id: 3, name: "Emotional Damage", basePrice: 0, year: 2022, category: "emotional", img: "https://placehold.co/400x300/ff0000/ffffff?text=Emotional+Damage", desc: "心靈爆擊，無法防禦。" },
-            { id: 4, name: "Doge (原始版)", basePrice: 999, year: 2013, category: "classic", img: "https://placehold.co/400x300/E1C699/000000?text=Doge+Coin", desc: "Much wow. Very crypto." },
-            { id: 5, name: "Pepe the Frog", basePrice: 420, year: 2010, category: "classic", img: "https://placehold.co/400x300/4C9F70/ffffff?text=Pepe", desc: "Feels bad man." },
-            { id: 6, name: "Skibidi Toilet", basePrice: 69, year: 2024, category: "useless", img: "https://placehold.co/400x300/666666/ffffff?text=Skibidi", desc: "請不要買這個，拜託。" },
-            { id: 7, name: "Woman Yelling at Cat", basePrice: 300, year: 2019, category: "classic", img: "https://placehold.co/400x300/pink/000000?text=Cat+Meme", desc: "這隻貓做錯了什麼？" },
-            { id: 8, name: "AI 繪圖的手指", basePrice: 88, year: 2025, category: "useless", img: "https://placehold.co/400x300/blue/white?text=6+Fingers", desc: "這是特徵，不是 Bug。" }
-        ];
-
-        let cart = [];
-        let currentProducts = [...MEME_PRODUCTS]; // 目前顯示的產品列表
-        let exchangeRate = 0.42; // 預設匯率 (1 Meme Coin = ? USD)
-        let volatility = 0.05; // 波動率
-
-        // --- 2. 模擬後端/外部 API 串接 ---
-
-        // 嘗試抓取真實的 Dogecoin 價格
-        async function fetchCryptoPrice() {
-            try {
-                // 使用 CoinGecko 免費 API
-                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=dogecoin&vs_currencies=usd');
-                const data = await response.json();
-
-                if (data.dogecoin && data.dogecoin.usd) {
-                    // 為了讓價格好看一點，我們把真實匯率放大一點
-                    return data.dogecoin.usd * 10;
-                }
-            } catch (error) {
-                console.warn("API 限制或失敗，使用模擬數據");
-            }
-            // Fallback: 如果 API 失敗，回傳一個隨機數
-            return 0.3 + Math.random() * 0.2;
-        }
-
-        // --- 3. 核心邏輯：價格波動系統 ---
-
-        async function startMarketLoop() {
-            const loader = document.getElementById('loader');
-            const grid = document.getElementById('product-grid');
-
-            // 初始載入
-            exchangeRate = await fetchCryptoPrice();
-            loader.classList.add('hidden');
-            grid.classList.remove('hidden');
-            renderProducts();
-            updateTicker();
-
-            // 啟動價格波動 (每 3 秒更新一次)
-            setInterval(() => {
-                // 模擬波動：隨機漲跌 5%
-                const change = 1 + (Math.random() * 0.1 - 0.05);
-                exchangeRate *= change;
-
-                // 更新 UI
-                updateTicker(change > 1);
-                updateProductPrices();
-            }, 3000);
-
-            // 每 60 秒嘗試抓一次真實資料 (避免 API Rate Limit)
-            setInterval(async () => {
-                const realRate = await fetchCryptoPrice();
-                if(realRate) exchangeRate = realRate;
-            }, 60000);
-        }
-
-        function updateTicker(isUp) {
-            const rateEl = document.getElementById('exchange-rate');
-            const changeEl = document.getElementById('rate-change');
-            const moodEl = document.getElementById('market-mood');
-
-            rateEl.innerText = `$${exchangeRate.toFixed(4)}`;
-
-            // 根據漲跌改變顏色
-            if (isUp) {
-                rateEl.className = "font-bold text-xl text-green-400 transition duration-300";
-                changeEl.innerText = "(📈 STONKS)";
-                changeEl.className = "text-green-400";
-                moodEl.innerText = "🤑";
-                moodEl.nextElementSibling.innerText = "貪婪時刻";
-                moodEl.nextElementSibling.className = "font-bold text-green-500";
-            } else {
-                rateEl.className = "font-bold text-xl text-red-500 transition duration-300";
-                changeEl.innerText = "(📉 PANIC)";
-                changeEl.className = "text-red-500";
-                moodEl.innerText = "😱";
-                moodEl.nextElementSibling.innerText = "極度恐慌";
-                moodEl.nextElementSibling.className = "font-bold text-red-600";
-            }
-        }
-
-        // --- 4. 渲染邏輯 ---
-
-        function renderProducts() {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = '';
-
-            if (currentProducts.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-center text-3xl font-bold bg-white p-10 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">找不到這個 Meme... 可能已經過氣了 🥀</div>';
-                return;
-            }
-
-            currentProducts.forEach(p => {
-                // 計算當前價格
-                const currentPrice = (p.basePrice * exchangeRate).toFixed(2);
-
-                const html = `
-                    <div class="win95-box bg-white flex flex-col h-full transform transition hover:-translate-y-1 hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] group">
-                        <div class="win95-header">
-                            <span class="truncate text-xs">${p.name}.exe [${p.year}]</span>
-                            <div class="flex gap-1">
-                                <div class="bg-gray-300 w-3 h-3 border border-black"></div>
-                                <div class="bg-gray-300 w-3 h-3 border border-black"></div>
-                            </div>
-                        </div>
-                        <div class="p-3 flex-1 flex flex-col">
-                            <div class="relative overflow-hidden border-2 border-black mb-2">
-                                <img src="${p.img}" alt="${p.name}" class="w-full h-40 object-cover shake-on-hover transition duration-500 group-hover:scale-110">
-                                <div class="absolute top-0 right-0 bg-yellow-300 px-1 border-l-2 border-b-2 border-black font-bold text-xs">
-                                    ${p.category === 'classic' ? '🏆 CLASSIC' : (p.year >= 2024 ? '🔥 NEW' : '💩 MEME')}
-                                </div>
-                            </div>
-
-                            <h3 class="font-black text-xl mb-1 text-blue-900 leading-tight">${p.name}</h3>
-                            <p class="text-xs text-gray-600 mb-3 font-mono flex-1 border-t border-gray-300 pt-1">${p.desc}</p>
-
-                            <div class="flex justify-between items-end mt-auto">
-                                <div>
-                                    <div class="text-xs text-gray-400 line-through">M${p.basePrice}</div>
-                                    <div class="text-2xl font-black font-mono price-tag" id="price-${p.id}" data-base="${p.basePrice}">
-                                        $${currentPrice}
-                                    </div>
-                                </div>
-                                <button onclick="addToCart(${p.id})" class="bg-blue-600 text-white px-3 py-1 font-bold border-2 border-black hover:bg-blue-500 active:bg-blue-700 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none text-sm">
-                                    BUY
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                grid.innerHTML += html;
-            });
-        }
-
-        // 只更新價格數字 (效能優化，不用重繪整個 DOM)
-        function updateProductPrices() {
-            const priceTags = document.querySelectorAll('.price-tag');
-            priceTags.forEach(tag => {
-                const base = parseFloat(tag.getAttribute('data-base'));
-                const oldPrice = parseFloat(tag.innerText.replace('$', ''));
-                const newPrice = (base * exchangeRate).toFixed(2);
-
-                tag.innerText = `$${newPrice}`;
-
-                // 價格跳動顏色效果
-                tag.classList.remove('price-up', 'price-down');
-                // 強制重繪以觸發動畫
-                void tag.offsetWidth;
-
-                if (newPrice > oldPrice) tag.classList.add('price-up');
-                else if (newPrice < oldPrice) tag.classList.add('price-down');
-            });
-
-            // 同步更新購物車總價
-            updateCartTotal();
-        }
-
-        // --- 5. 篩選與分類功能 ---
-        function filterProducts(type) {
-            if (type === 'all') {
-                currentProducts = [...MEME_PRODUCTS];
-            } else if (type === '2025') {
-                // 近期熱門：篩選 2024 年以後的
-                currentProducts = MEME_PRODUCTS.filter(p => p.year >= 2024);
-            } else if (type === 'classic') {
-                // 經典：篩選 2020 年以前的
-                currentProducts = MEME_PRODUCTS.filter(p => p.year <= 2020);
-            } else {
-                // 類別篩選
-                currentProducts = MEME_PRODUCTS.filter(p => p.category === type);
-            }
-            renderProducts();
-        }
-
-        // --- 6. 購物車功能 ---
-        function addToCart(id) {
-            const product = MEME_PRODUCTS.find(p => p.id === id);
-            // 加入購物車時，鎖定當下的價格
-            const lockedPrice = parseFloat((product.basePrice * exchangeRate).toFixed(2));
-
-            cart.push({ ...product, lockedPrice });
-            updateCartUI();
-
-            // 隨機動畫
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = "GOTCHA!";
-            btn.classList.add("bg-green-500");
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.classList.remove("bg-green-500");
-            }, 500);
-        }
-
-        function updateCartUI() {
-            document.getElementById('cart-count').innerText = cart.length;
-            const list = document.getElementById('cart-items');
-            list.innerHTML = '';
-
-            cart.forEach((item, index) => {
-                list.innerHTML += `
-                    <li class="flex justify-between items-center bg-gray-100 p-2 border border-dotted border-gray-400">
-                        <div>
-                            <span class="font-bold block text-blue-800">${item.name}</span>
-                            <span class="text-xs text-gray-500">[${item.year}]</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="font-mono font-bold">$${item.lockedPrice}</span>
-                            <button onclick="removeFromCart(${index})" class="text-red-500 font-bold hover:bg-red-100 px-2 rounded">x</button>
-                        </div>
-                    </li>
-                `;
-            });
-            updateCartTotal();
-        }
-
-        function updateCartTotal() {
-            // 購物車內的價格是「鎖定」的，還是隨市價波動？
-            // 為了好玩，我們讓它隨市價波動 (除了已經加入的) -> 修正：這裡使用 lockedPrice 比較合理
-            const total = cart.reduce((acc, item) => acc + item.lockedPrice, 0);
-            document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartUI();
-        }
-
-        function toggleCart() {
-            const modal = document.getElementById('cart-modal');
-            modal.classList.toggle('hidden');
-        }
-
-        function checkout() {
-            if (cart.length === 0) {
-                alert("購物車是空的，這代表你心靈富足 (或是單純沒錢) 🧘");
-                return;
-            }
-            alert(`交易成功！\n總共花費 $${document.getElementById('cart-total').innerText}\n\n提醒：你的信用卡帳單將在下個月爆炸。`);
-            cart = [];
-            updateCartUI();
-            toggleCart();
-        }
-
-        // --- 啟動 ---
-        startMarketLoop();
-
-    </script>
 </body>
 </html>
