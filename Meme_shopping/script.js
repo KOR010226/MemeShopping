@@ -29,7 +29,7 @@ const PRODUCTS = [
     { id: 28, name: "劉德華恭喜發財", price: 30, type: "taiwan", desc: "恭喜你發財。" },
     { id: 29, name: "超派鐵拳", price: 999, type: "taiwan", desc: "醋飯天條。" },
     { id: 30, name: "可以色色", price: 18, type: "taiwan", desc: "不可以色色。" },
-    { id: 31, name: "小黃瓜", price: 30, type: "mygo", desc: "這個我不要了。" },
+    { id: 31, name: "小黃瓜", price: 30, type: "mygo", desc: "這個不用了。" },
     { id: 32, name: "讓我(們)看看(?", price: 999, type: "mygo", desc: "不讓我們看看我們怎麼知道。" },
     { id: 33, name: "演奏春日影", price: 100, type: "mygo", desc: "因為春日影是一首好歌。" },
     { id: 34, name: "ア．テンポノート", price: 10, type: "mygo", desc: "那是...歌詞嗎 ?" },
@@ -264,4 +264,5 @@ window.onload = async function() {
 
     setInterval(getRate, 2000);
 };
+
 
