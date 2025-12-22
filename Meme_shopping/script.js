@@ -29,6 +29,21 @@ const PRODUCTS = [
     { id: 28, name: "劉德華恭喜發財", price: 30, type: "taiwan", desc: "恭喜你發財。" },
     { id: 29, name: "超派鐵拳", price: 999, type: "taiwan", desc: "醋飯天條。" },
     { id: 30, name: "可以色色", price: 18, type: "taiwan", desc: "不可以色色。" }
+    { id: 31, name: "小黃瓜", price: 30, type: "mygo", desc: "這個我不要了。" }
+    { id: 32, name: "讓我(們)看看(?", price: 999, type: "mygo", desc: "不讓我們看看我們怎麼知道。" }
+    { id: 33, name: "演奏春日影", price: 100, type: "mygo", desc: "因為春日影是一首好歌。" }
+    { id: 34, name: "ア．テンポノート", price: 10, type: "mygo", desc: "那是...歌詞嗎 ?" }
+    { id: 35, name: "一輩子", price: 111, type: "mygo", desc: "她和我約好要一輩子組樂團了。" }
+    { id: 36, name: "蘇玉玲", price: 450, type: "mygo", desc: "Soyorin。" }
+    { id: 37, name: "是這樣沒錯，但不是這樣", price: 4, type: "mygo", desc: "什麼叫不是這樣。" }
+    { id: 38, name: "木須龍", price: 576, type: "mygo", desc: "我愛慕虛榮啦。" }
+    { id: 39, name: "瓦他希", price: 5, type: "mygo", desc: "要是沒有小祥妳們的話我就。" }
+    { id: 40, name: "無視燈", price: 54, type: "mygo", desc: "那傢伙竟敢無視燈。" }
+    { id: 41, name: "🤡", price: 9, type: "mygo", desc: "面紗之下的小丑。" }
+    { id: 42, name: "HBD", price: 18, type: "mygo", desc: "生日快樂。" }
+    { id: 43, name: "薑汁汽水", price: 55, type: "mygo", desc: "請給我薑汁汽水,辣一點的。" }
+    { id: 44, name: "一頭一頭一頭野獸", price: 3, type: "mygo", desc: "你是多頭的野獸。" }
+    { id: 45, name: "還真是高高在上", price: 375, type: "mygo", desc: "而且這樣擅作主張。" }
 ];
 
 let rate = 1.0;
@@ -249,3 +264,4 @@ window.onload = async function() {
 
     setInterval(getRate, 2000);
 };
+
