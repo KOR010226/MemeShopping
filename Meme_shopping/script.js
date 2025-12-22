@@ -11,7 +11,7 @@ const PRODUCTS = [
     { id: 10, name: "Woman Yelling at Cat", price: 250, type: "classic", desc: "Smudge the cat." },
     { id: 11, name: "Distracted Boyfriend", price: 50, type: "classic", desc: "Looking back." },
     { id: 12, name: "This Is Fine", price: 999, type: "classic", desc: "Fire everywhere." },
-    { id: 13, name: "Change My Mind", price: 10, type: "classic", desc: "Prove me wrong." },
+    { id: 13, name: "Emotional Damage", price: 10, type: "classic", desc: "What the say..." },
     { id: 14, name: "Is This A Pigeon", price: 30, type: "classic", desc: "Butterfly?" },
     { id: 15, name: "Drake Hotline", price: 80, type: "classic", desc: "No / Yes." },
     { id: 16, name: "傑哥不要", price: 87, type: "taiwan", desc: "讓我康康！" },
@@ -22,11 +22,11 @@ const PRODUCTS = [
     { id: 21, name: "歸剛欸", price: 77, type: "taiwan", desc: "水母頭。" },
     { id: 22, name: "阿姨我不想努力", price: 9999, type: "taiwan", desc: "求包養。" },
     { id: 23, name: "是在哈囉", price: 10, type: "taiwan", desc: "Hello?" },
-    { id: 24, name: "像極了愛情", price: 520, type: "taiwan", desc: "寫詩。" },
+    { id: 24, name: "咻蹦", price: 520, type: "taiwan", desc: "安餒今大聲。" },
     { id: 25, name: "降肉", price: 800, type: "taiwan", desc: "九天玄女。" },
-    { id: 26, name: "關於我可能讓你很意外", price: 1, type: "taiwan", desc: "Point." },
-    { id: 27, name: "咩噗", price: 55, type: "taiwan", desc: "流淚。" },
-    { id: 28, name: "甘安捏", price: 30, type: "taiwan", desc: "方岑。" },
+    { id: 26, name: "小孩子才做選擇", price: 1, type: "taiwan", desc: "我全都要！" },
+    { id: 27, name: "QQㄋㄟㄋㄟ好喝到咩噗茶", price: 55, type: "taiwan", desc: "講出來！" },
+    { id: 28, name: "劉德華恭喜發財", price: 30, type: "taiwan", desc: "恭喜你發財。" },
     { id: 29, name: "超派鐵拳", price: 999, type: "taiwan", desc: "醋飯天條。" },
     { id: 30, name: "可以色色", price: 18, type: "taiwan", desc: "不可以色色。" }
 ];
@@ -58,9 +58,8 @@ function getRate() {
     drawProducts();
 }
 
-function getImageUrl(name) {
-    const text = encodeURIComponent(name);
-    return `https://placehold.co/400x400/e2e8f0/1e293b?text=${text}`;
+function getImageUrl(p) {
+    return `img/${p.id}.png`;
 }
 
 function drawProducts() {
@@ -69,9 +68,10 @@ function drawProducts() {
 
     showProducts.forEach(p => {
         const price = (p.price * rate).toFixed(2);
-        const imgSrc = getImageUrl(p.name);
+        const imgSrc = getImageUrl(p);
         const isPriceUp = Math.random() > 0.5;
         const priceClass = isPriceUp ? 'green-text' : 'red-text';
+        const fallbackUrl = `https://placehold.co/400x400/e2e8f0/1e293b?text=${encodeURIComponent(p.name)}`;
 
         const html = `
             <div class="box product-card bg-white">
@@ -84,7 +84,7 @@ function drawProducts() {
                 </div>
                 <div style="padding: 1rem; display: flex; flex-direction: column; flex: 1;">
                     <div class="card-image-container">
-                        <img src="${imgSrc}" class="card-image" alt="${p.name}">
+                        <img src="${imgSrc}" class="card-image" alt="${p.name}" onerror="this.onerror=null; this.src='${fallbackUrl}'">
                         <div class="card-tag">
                             #${p.type.toUpperCase()}
                         </div>

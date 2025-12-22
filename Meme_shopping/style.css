@@ -181,6 +181,8 @@ body {
 
 .cat-btn {
     width: 100%;
+    display: block;
+    box-sizing: border-box;
     border: 2px solid black;
     padding: 8px 12px;
     font-weight: bold;
@@ -191,6 +193,8 @@ body {
     margin-bottom: 8px;
     cursor: pointer;
     font-size: 1rem;
+    appearance: none;
+    text-decoration: none;
 }
 .cat-btn:hover {
     transform: translate(-2px, -2px);
