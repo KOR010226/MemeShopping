@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
@@ -7,8 +8,12 @@ app.use(cors());
 app.use(express.json());
 
 let db;
-const uri = "mongodb+srv://smallshawn95_db_user:meme_mart@cluster0.i9j27kn.mongodb.net/?appName=Cluster0";
-const client = new MongoClient(uri);
+const MONGO_URI = process.env.MONGO_URI;
+if (!MONGO_URI) {
+    console.error("❌ 錯誤：找不到 MONGO_URI 環境變數！");
+    process.exit(1);
+}
+const client = new MongoClient(MONGO_URI);
 
 async function connectToDB() {
     try {
