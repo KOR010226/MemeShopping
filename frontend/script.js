@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+const API_URL = "https://meme-mart-api.onrender.com";
 
 let PRODUCTS = [];
 let FAKE_QUOTES = [];
